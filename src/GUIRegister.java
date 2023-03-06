@@ -5,19 +5,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.twilio.Twilio;
+import com.twilio.converter.Promoter;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 public class GUIRegister extends JFrame{
 
     private JLabel titlu;
     private Angajat angajat;
     private Client client;
-    private JButton register;
+    private JButton register, back;
     private JLabel nume, prenume, email, parola, confirmaParola, adresa, telefon;
     private JTextField tfNume, tfPrenume, tfEmail, tfAdresa, tfTelefon;
     private JPasswordField tfParola, tfConfirmare;
     private JCheckBox arataParola, arataConfirmare;
+    public static final String ACCOUNT_SID = "AC1779549c53c199d39d31d876422e64aa";
+    public static final String AUTH_TOKEN = "34b217e2197726f0a6143a0d6dd13c8b";
 
     public GUIRegister(Connection connection){
         setVisible(true);
@@ -149,7 +156,28 @@ public class GUIRegister extends JFrame{
         register.setOpaque(true);
         register.setSize(new Dimension(150, 50));
         register.setFont(new Font("Monaco", Font.BOLD, 17));
-        register.setBounds(170, 450, 150, 50);
+        register.setBounds(20, 450, 150, 50);
+
+        back = new JButton("INAPOI");
+        back.setForeground(Color.WHITE);
+        back.setBackground(new Color(20, 66, 114));
+        back.setOpaque(true);
+        back.setSize(new Dimension(150, 50));
+        back.setFont(new Font("Monaco", Font.BOLD, 17));
+        back.setBounds(200, 450, 150, 50);
+        add(back);
+
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                setVisible(false);
+                GUIPaginaPrincipala paginaPrincipala = new GUIPaginaPrincipala(connection);
+                paginaPrincipala.setVisible(true);
+                paginaPrincipala.setLocationRelativeTo(null);
+                paginaPrincipala.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            }
+        });
 
         arataParola = new JCheckBox("Arata parola");
         arataParola.setForeground(Color.WHITE);
@@ -198,20 +226,7 @@ public class GUIRegister extends JFrame{
                         tfParola.getText().equals("") || tfTelefon.getText().equals("") || tfAdresa.getText().equals("")){
                     JOptionPane.showMessageDialog(null,"Completeaza toate campurile!");
                 }else{
-
-                    Statement stmt = null;
-                    int count;
-
-                    try {
-                        stmt = connection.createStatement();
-                        String query = "select count(*) from clienti";
-                        ResultSet rs = stmt.executeQuery(query);
-                        rs.next();
-                        count = rs.getInt(1);
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
+                    int count = getNrIntrari(connection);
                     if (verificareEmailValid(em) == false){
                         JOptionPane.showMessageDialog(null, "Email invalid!");
                     }else if (pass.length() < 10){
@@ -219,29 +234,69 @@ public class GUIRegister extends JFrame{
                     }else if (!pass.equals(confpass)) {
                         JOptionPane.showMessageDialog(null, "Parolele nu coincid!");
                     }else{
-                        String sql = "insert into clienti (id, nume, prenume, email, parola)" + " values(?, ?, ?, ?, ?)";
-                        try {
-                            PreparedStatement addStmt = connection.prepareStatement(sql);
+                        Client c = new Client(count + 1, n, p, em, pass, adr, tel);
+                        boolean ok = false;
+                        Random r = new Random();
+                        int limita = 999;
+                        int limitajos = 100;
+                        int codRandom = r.nextInt(limitajos, limita);
+                        String mesaj = String.valueOf(codRandom);
+                        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+                        Message message = Message.creator(new com.twilio.type.PhoneNumber("+40764980720"), "MG40ac2c0e4c75237c2c923986c0928901", mesaj).create();
+                        while (ok == false) {
+                            String cod = JOptionPane.showInputDialog("Introdu codul primit prin mesaj: ");
+                            if (cod.equals(mesaj)) {
+                                ok = true;
+                                String sql = "insert into clienti (id, nume, prenume, email, parola, adresa, telefon)" + " values(?, ?, ?, ?, ?, ?, ?)";
+                                try {
+                                    PreparedStatement addStmt = connection.prepareStatement(sql);
 
-                            addStmt.setInt(1, count + 1);
-                            addStmt.setString(2, n);
-                            addStmt.setString(3, p);
-                            addStmt.setString(4, em);
-                            addStmt.setString(5, pass);
+                                    addStmt.setInt(1, count + 1);
+                                    addStmt.setString(2, n);
+                                    addStmt.setString(3, p);
+                                    addStmt.setString(4, em);
+                                    addStmt.setString(5, pass);
+                                    addStmt.setString(6, adr);
+                                    addStmt.setString(7, tel);
 
-                            addStmt.execute();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        } finally {
-                            JOptionPane.showMessageDialog(null, "Inregistrare completa.");
-                            dispose();
-                            setVisible(false);
+                                    addStmt.execute();
+                                } catch (SQLException ex) {
+                                    throw new RuntimeException(ex);
+                                } finally {
+                                    JOptionPane.showMessageDialog(null, "Inregistrare completa.");
+                                    dispose();
+                                    setVisible(false);
+                                    GUIPaginaPrincipalaClient guiMainPageLogat = new GUIPaginaPrincipalaClient(connection, c);
+                                    guiMainPageLogat.setVisible(true);
+                                    guiMainPageLogat.setLocationRelativeTo(null);
+                                    guiMainPageLogat.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Cod incorect!");
+                            }
                         }
                     }
                 }
             }
         });
      }
+
+     public int getNrIntrari(Connection connection){
+         Statement stmt = null;
+         int count;
+
+         try {
+             stmt = connection.createStatement();
+             String query = "select count(*) from clienti";
+             ResultSet rs = stmt.executeQuery(query);
+             rs.next();
+             count = rs.getInt(1);
+         } catch (SQLException ex) {
+             throw new RuntimeException(ex);
+         }
+         return count;
+     }
+
      public boolean verificareEmailValid(String s){
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}";
         Pattern pattern = Pattern.compile(regex);

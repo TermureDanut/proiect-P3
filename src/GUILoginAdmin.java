@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class GUILoginAdmin extends JFrame{
     private JLabel lab1, email, parola;
-    private JButton login;
+    private JButton login, back;
     private JTextField tfEmail;
     private JPasswordField pfParola;
     private JCheckBox afiseazaParola;
@@ -74,12 +74,31 @@ public class GUILoginAdmin extends JFrame{
 
         login = new JButton("LOGIN");
         login.setSize(new Dimension(176, 49));
-        login.setBounds(295, 291, 176, 49);
+        login.setBounds(181, 291, 176, 49);
         login.setFont(new Font("Monaco", Font.BOLD, 20));
         login.setBackground(new Color(44, 116, 179));
         login.setForeground(Color.WHITE);
         add(login);
 
+        back = new JButton("INAPOI");
+        back.setSize(new Dimension(176, 49));
+        back.setBounds(450, 291, 176, 49);
+        back.setFont(new Font("Monaco", Font.BOLD, 20));
+        back.setBackground(new Color(44, 116, 179));
+        back.setForeground(Color.WHITE);
+        add(back);
+
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                setVisible(false);
+                GUIPaginaPrincipala guiPaginaPrincipala = new GUIPaginaPrincipala(connection);
+                guiPaginaPrincipala.setVisible(true);
+                guiPaginaPrincipala.setLocationRelativeTo(null);
+                guiPaginaPrincipala.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            }
+        });
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

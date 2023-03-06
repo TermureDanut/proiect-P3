@@ -52,33 +52,48 @@ public class GUIProdus extends JFrame {
         adaugaInCos.setBounds(395, 198, 232, 64);
         add(adaugaInCos);
 
+
         adaugaInCos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (c.getP1() == 0) {
                     JOptionPane.showMessageDialog(null, "Produs adaugat in cos.");
                     c.setP1(p.getId());
-                    adauga(connection, p.getId(), "idProdus1",c.getId());
+                    adauga(connection, p.getId(), "produs1",c.getId());
                 }else{
                     if (c.getP2() == 0 && p.getId() != c.getP1()){
                         JOptionPane.showMessageDialog(null, "Produs adaugat in cos.");
                         c.setP2(p.getId());
-                        adauga(connection, p.getId(), "idProdus2", c.getId());
+                        adauga(connection, p.getId(), "produs2", c.getId());
                     }else{
                         if (c.getP3() == 0 && p.getId() != c.getP1() && p.getId() != c.getP2()){
                             JOptionPane.showMessageDialog(null, "Produs adaugat in cos.");
                             c.setP3(p.getId());
-                            adauga(connection, p.getId(), "idProdus3", c.getId());
+                            adauga(connection, p.getId(), "produs3", c.getId());
                         }else{
-                            if (c.getP3() != 0){
-                                JOptionPane.showMessageDialog(null, "Ai atins limita maxima de elemente in cos.");
+                            if (c.getP4() == 0 && p.getId() != c.getP1() && p.getId() != c.getP2() && p.getId() != c.getP3()) {
+                                JOptionPane.showMessageDialog(null, "Produs adaugat in cos.");
+                                c.setP4(p.getId());
+                                adauga(connection, p.getId(), "produs4", c.getId());
+                            }else{
+                                if (c.getP5() == 0 && p.getId() != c.getP1() && p.getId() != c.getP2() && p.getId() != c.getP3() && p.getId() != c.getP4()) {
+                                    JOptionPane.showMessageDialog(null, "Produs adaugat in cos.");
+                                    c.setP5(p.getId());
+                                    adauga(connection, p.getId(), "produs5", c.getId());
+                                }else{
+                                    if (c.getP5() != 0){
+                                        JOptionPane.showMessageDialog(null, "Ai atins limita maxima de elemente in cos.");
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         });
+
     }
+
 
     public void adauga(Connection connection, int idProdus, String nrIdProdus, int idClient){
         String stmt = "update clienti set " + nrIdProdus + " = ? where id = " + Integer.toString(idClient);

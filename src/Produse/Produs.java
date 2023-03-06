@@ -39,7 +39,7 @@ public class Produs {
     }
 
     public String toString() {
-        return marca + ": categorie: " + categorie + ", culoare: " + culoare + ", pret: " + pret + " lei";
+        return marca + ": categorie: " + categorie + "\nculoare: " + culoare + ", pret: " + pret + " lei";
     }
 
     public String toStringAdmin(){

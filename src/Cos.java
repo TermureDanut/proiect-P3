@@ -25,7 +25,22 @@ public class Cos extends JFrame {
         setLocationRelativeTo(null);
         setLayout(null);
 
-        String toPrint = addToTextArea(connection, c.getP1()) + '\n' + addToTextArea(connection, c.getP2()) + '\n' + addToTextArea(connection, c.getP3());
+        String toPrint = "";
+        if (c.getP1() != 0)
+            toPrint = toPrint + addToTextArea(connection, c.getP1()) + '\n';
+
+        if (c.getP2() != 0)
+            toPrint = toPrint + addToTextArea(connection, c.getP2()) + '\n';
+
+        if (c.getP3() != 0)
+            toPrint = toPrint + addToTextArea(connection, c.getP3()) + '\n';
+
+        if (c.getP4() != 0)
+            toPrint = toPrint + addToTextArea(connection, c.getP4()) + '\n';
+
+        if (c.getP5() != 0)
+            toPrint = toPrint + addToTextArea(connection, c.getP5()) + '\n';
+
         textArea = new JTextArea(toPrint);
         textArea.setFont(new Font("Monaco", Font.PLAIN, 17));
         textArea.setForeground(Color.WHITE);
@@ -64,21 +79,35 @@ public class Cos extends JFrame {
                     c.setP1(0);
                     String toPrint = addToTextArea(connection, c.getP2()) + '\n' + addToTextArea(connection, c.getP3());
                     textArea.setText(toPrint);
-                    adauga(connection, 0, "idProdus1", c.getId());
+                    adauga(connection, 0, "produs1", c.getId());
                     JOptionPane.showMessageDialog(null, "Sters");
                 }
                 if (Integer.parseInt(textField.getText()) == 2){
                     c.setP2(0);
                     String toPrint = addToTextArea(connection, c.getP1()) + '\n' + addToTextArea(connection, c.getP3());
                     textArea.setText(toPrint);
-                    adauga(connection, 0, "idProdus2", c.getId());
+                    adauga(connection, 0, "produs2", c.getId());
                     JOptionPane.showMessageDialog(null, "Sters");
                 }
                 if (Integer.parseInt(textField.getText()) == 3){
                     c.setP3(0);
                     String toPrint = addToTextArea(connection, c.getP1()) + '\n' + addToTextArea(connection, c.getP2());
                     textArea.setText(toPrint);
-                    adauga(connection, 0, "idProdus3", c.getId());
+                    adauga(connection, 0, "produs3", c.getId());
+                    JOptionPane.showMessageDialog(null, "Sters");
+                }
+                if (Integer.parseInt(textField.getText()) == 4){
+                    c.setP4(0);
+                    String toPrint = addToTextArea(connection, c.getP1()) + '\n' + addToTextArea(connection, c.getP2()) + '\n' + addToTextArea(connection, c.getP3());
+                    textArea.setText(toPrint);
+                    adauga(connection, 0, "produs4", c.getId());
+                    JOptionPane.showMessageDialog(null, "Sters");
+                }
+                if (Integer.parseInt(textField.getText()) == 5){
+                    c.setP5(0);
+                    String toPrint = addToTextArea(connection, c.getP1()) + '\n' + addToTextArea(connection, c.getP2()) + '\n' + addToTextArea(connection, c.getP3()) + '\n' + addToTextArea(connection, c.getP4());
+                    textArea.setText(toPrint);
+                    adauga(connection, 0, "produs5", c.getId());
                     JOptionPane.showMessageDialog(null, "Sters");
                 }
             }

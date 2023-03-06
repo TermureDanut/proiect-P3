@@ -1,0 +1,45 @@
+<component name="libraryTable">
+  <library name="activation">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/mailactivation/activation.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/mailactivation/mail.jar!/" />
+      <root url="file://$PROJECT_DIR$/../.." />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../db-derby-10.16.1.1-bin/demo/programs" />
+      <root url="file://$PROJECT_DIR$/../../db-derby-10.16.1.1-bin/demo/programs/scores/java/client" />
+      <root url="file://$PROJECT_DIR$/../../db-derby-10.16.1.1-bin/demo/programs/scores/java/common" />
+      <root url="file://$PROJECT_DIR$/../../db-derby-10.16.1.1-bin/demo/programs/scores/java/server" />
+      <root url="file://$PROJECT_DIR$/../../db-derby-10.16.1.1-bin/demo/programs/simple" />
+      <root url="file://$PROJECT_DIR$/../../db-derby-10.16.1.1-bin/demo/programs/vtis/java" />
+      <root url="file://$PROJECT_DIR$/../PI/src" />
+      <root url="file://$PROJECT_DIR$/../ProiectPI/src" />
+      <root url="file://$PROJECT_DIR$/src" />
+      <root url="file://$PROJECT_DIR$/../lab10/src" />
+      <root url="file://$PROJECT_DIR$/../lab11/src" />
+      <root url="file://$PROJECT_DIR$/../temaP3/src" />
+      <root url="file://$PROJECT_DIR$/../../java/Lab12.zip_expanded/src" />
+      <root url="file://$PROJECT_DIR$/../../java/ProbLab3.zip_expanded/lab3figuri/src" />
+      <root url="file://$PROJECT_DIR$/../../java/exemplu1/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab01/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab01i/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../java/lab1/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab2/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab3Acasa/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab3/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab4/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab5/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab5_Floare/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab6/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab7/src" />
+      <root url="file://$PROJECT_DIR$/../../java/lab7ex1/src" />
+      <root url="file://$PROJECT_DIR$/../../java/takeoff/src" />
+      <root url="file://$PROJECT_DIR$/../../java/temaLab6/src" />
+      <root url="file://$PROJECT_DIR$/../../java/tema/src" />
+      <root url="file://$PROJECT_DIR$/../.." />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../.." recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../.." recursive="false" type="SOURCES" />
+  </library>
+</component>

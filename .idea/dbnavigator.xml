@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
@@ -25,6 +25,9 @@
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
   </component>
+  <component name="DBNavigator.Project.FileConnectionMappingManager">
+    <mapping file-url="file://$PROJECT_DIR$" connection-id="14b3bc1d-ada3-457d-89c2-a103c13011fe" session-id="MAIN" current-schema="myshopdb" />
+  </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
@@ -42,8 +45,8 @@
           <config-type value="BASIC" />
           <database-version value="8.0" />
           <driver-source value="EXTERNAL" />
-          <driver-library value="C:\Users\Termure\Downloads\jar_files\mysql-connector-java-8.0.13.jar" />
-          <driver value="com.mysql.jdbc.Driver" />
+          <driver-library value="C:\Users\Termure\Downloads\setup\jar_files\mysql-connector-java-8.0.13.jar" />
+          <driver value="com.mysql.cj.jdbc.Driver" />
           <url-type value="DATABASE" />
           <host value="localhost" />
           <port value="3306" />

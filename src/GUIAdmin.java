@@ -2,13 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import LoginRelated.Angajat;
 import Produse.*;
+import arbore.bstClass;
 
 public class GUIAdmin extends JFrame{
     private List<Produs> listaProduse;
@@ -206,6 +206,8 @@ public class GUIAdmin extends JFrame{
                 GUIUpdateAngajat guiupdate = new GUIUpdateAngajat(connection);
             }
         });
+
+        show("Fereastra destinata modificarilor pe care le poate face admin-ul");
         veziMin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -288,6 +290,7 @@ public class GUIAdmin extends JFrame{
                 }
 
                 bstClass.Node temp = bst.minValueNode(bst.root);
+                delete();
                 show(temp.a.toStringAdmin());
             }
         });
@@ -374,6 +377,7 @@ public class GUIAdmin extends JFrame{
                 }
 
                 bstClass.Node temp = bst.maxValueNode(bst.root);
+                delete();
                 show(temp.a.toStringAdmin());
             }
         });
@@ -382,6 +386,7 @@ public class GUIAdmin extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String toPrint = printAngajati(connection, listaAngajati);
+                delete();
                 show(toPrint);
             }
         });
@@ -390,6 +395,7 @@ public class GUIAdmin extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String toPrint = printProduse(connection, listaProduse);
+                delete();
                 show(toPrint);
             }
         });
@@ -461,9 +467,15 @@ public class GUIAdmin extends JFrame{
         });
     }
 
+    public void delete(){
+        remove(tArea);
+        remove(scrollPane);
+    }
+
     public void show(String s){
         tArea = new JTextArea(s);
         tArea.setSize(new Dimension(342, 542));
+        tArea.setLineWrap(true);
         tArea.setBounds(345, 14, 332, 542);
         tArea.setFont(new Font("Monaco", Font.PLAIN, 13));
         tArea.setForeground(Color.WHITE);

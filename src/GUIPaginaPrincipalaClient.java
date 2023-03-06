@@ -12,18 +12,22 @@ import java.util.List;
 public class GUIPaginaPrincipalaClient extends JFrame {
 
     private JButton signout, cos, comanda;
-    private JButton meniuL, meniuTT, meniuP, meniuCM, meniuTAV, meniuG;
-    private JScrollPane mainContent;
-    private JPanel produse;
+    private JButton meniuL, meniuTT, meniuP, meniuCM, meniuTAV, meniuG, toate;
     private JLabel paginaPrincipala;
-    private List<Pereche> butoane;
+    private JScrollPane scrollPanePrincipal;
+    private JPanel panelPrincipal;
+    private List<Produs> produse;
+    private List<JPanel> listaProdusePaneluri;
+    private List<JButton> butoane;
 
     public GUIPaginaPrincipalaClient(Connection connection, Client c){
         setTitle("Pagina principala");
-        setSize(new Dimension(980, 800));
+        setSize(new Dimension(980, 1000));
         getContentPane().setBackground(new Color(10, 38, 71));
         setResizable(false);
         setLayout(null);
+
+        retrieve(connection);
 
         JPanel susStanga = new JPanel(new FlowLayout(FlowLayout.CENTER));
         susStanga.setSize(new Dimension(260, 70));
@@ -71,10 +75,13 @@ public class GUIPaginaPrincipalaClient extends JFrame {
         add(susDreapta);
 
         JPanel mijlocSus = new JPanel();
-        mijlocSus.setSize(new Dimension(960, 50));
-        mijlocSus.setBounds(10, 100, 960, 50);
+        mijlocSus.setSize(new Dimension(960, 100));
+        mijlocSus.setBounds(10, 100, 960, 100);
         mijlocSus.setBackground(new Color(10, 38, 71));
+        mijlocSus.setLayout(new FlowLayout());
         mijlocSus.setOpaque(true);
+
+        addToPanelPrincipal(connection, "toate", c);
 
         meniuL = new JButton("Laptopuri");
         meniuL.setForeground(Color.WHITE);
@@ -118,37 +125,81 @@ public class GUIPaginaPrincipalaClient extends JFrame {
         meniuG.setBackground(new Color(20, 66, 114));
         meniuG.setOpaque(true);
 
+        toate = new JButton("TOATE");
+        toate.setForeground(Color.WHITE);
+        toate.setFont(new Font("Monaco", Font.BOLD, 12));
+        toate.setPreferredSize(new Dimension(110, 40));
+        toate.setBackground(new Color(20, 66, 114));
+        toate.setOpaque(true);
+
         mijlocSus.add(meniuL);
         mijlocSus.add(meniuTT);
         mijlocSus.add(meniuP);
         mijlocSus.add(meniuCM);
         mijlocSus.add(meniuTAV);
         mijlocSus.add(meniuG);
+        mijlocSus.add(toate);
         add(mijlocSus);
 
-        int count = getNrIntrari(connection);
+        meniuL.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "laptop", c);
+            }
+        });
 
-        produse = new JPanel();
-        produse.setLayout(new GridLayout(count / 2, 2));
-        produse.setSize(new Dimension(960, 560));
-        produse.setBounds(10, 150, 960, 560);
-        produse.setBackground(new Color(44, 116, 179));
-        produse.setOpaque(true);
+        meniuTT.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "telefoane/tablete", c);
+            }
+        });
 
-        mainContent = new JScrollPane(produse);
-        mainContent.setSize(new Dimension(960, 560));
-        mainContent.setBounds(10, 150, 960, 560);
-        mainContent.setBackground(new Color(44, 116, 179));
-        mainContent.setOpaque(true);
-        mainContent.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        add(mainContent);
+        meniuP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "periferice", c);
+            }
+        });
 
-        addToPanel(connection, c);
+        meniuCM.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "calculatoare/monitoare", c);
+            }
+        });
+        meniuG.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "gaming", c);
+            }}
+        );
+        meniuTAV.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "televizoare/audio/video", c);
+            }
+        });
+
+        toate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stergere();
+                addToPanelPrincipal(connection, "toate", c);
+            }
+        });
+
 
         cos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (c.getP1() == 0 && c.getP2() == 0 && c.getP3() == 0) {
+                if (c.getP1() == 0 && c.getP2() == 0 && c.getP3() == 0 && c.getP4() == 0 && c.getP5() == 0) {
                     JOptionPane.showMessageDialog(null, "Nu exista produse in cos");
                 }else {
                     Cos pp = new Cos(connection, c);
@@ -159,7 +210,7 @@ public class GUIPaginaPrincipalaClient extends JFrame {
         comanda.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (c.getP1() == 0 && c.getP2() == 0 && c.getP3() == 0) {
+                if (c.getP1() == 0 && c.getP2() == 0 && c.getP3() == 0 && c.getP4() == 0 && c.getP5() == 0) {
                     JOptionPane.showMessageDialog(null, "Nu exista produse in cos");
                 }else {
                     Comanda pp = new Comanda(connection, c);
@@ -179,6 +230,174 @@ public class GUIPaginaPrincipalaClient extends JFrame {
         });
 
     }
+    public int urmatorulMultiplu(int n){
+        int x = n;
+        boolean ok = false;
+        while (ok == false){
+            if (x % 3 == 0){
+                ok = true;
+                return x;
+            }
+            x = x + 1;
+        }
+        return x;
+    }
+    public int nrProduseCategorie(String categorie){
+        int count = 0;
+        for (Produs p : produse){
+            if (categorie.equals(p.getCategorie().toLowerCase())){
+                count = count + 1;
+            }
+
+            if (categorie.equals("toate")){
+                count = count + 1;
+            }
+        }
+        return count;
+    }
+    public void addToPanelPrincipal(Connection connection, String categorie, Client c){
+        listaProdusePaneluri = new ArrayList<>();
+        butoane = new ArrayList<>();
+        addToListPanel(categorie, connection, c);
+
+        int count = nrProduseCategorie(categorie);
+        int nr = getNrIntrari(connection);
+        int urmatorulMultiplu = urmatorulMultiplu(nr);
+
+        panelPrincipal = new JPanel();
+        panelPrincipal.setBackground(Color.WHITE);
+        panelPrincipal.setOpaque(true);
+        panelPrincipal.setLayout(new GridLayout(urmatorulMultiplu / 3, 3));
+        panelPrincipal.setSize(new Dimension(900, 760));
+        panelPrincipal.setBounds(30, 200, 900, 760);
+
+        for (JButton b : butoane){
+            panelPrincipal.add(b);
+        }
+
+        for (int i = 0; i < urmatorulMultiplu - count; i++) {
+            JButton produs = new JButton();
+            produs.setLayout(null);
+            produs.setBorderPainted(false);
+            produs.setContentAreaFilled(false);
+            produs.setFocusPainted(false);
+            produs.setOpaque(true);
+            produs.setMargin(new Insets(10, 10, 10, 10));
+            produs.setSize(new Dimension(300, 400));
+            produs.setBackground(Color.WHITE);
+            panelPrincipal.add(produs);
+        }
+
+        scrollPanePrincipal = new JScrollPane(panelPrincipal);
+        scrollPanePrincipal.setBackground(Color.WHITE);
+        scrollPanePrincipal.setOpaque(true);
+        scrollPanePrincipal.setSize(new Dimension(900, 760));
+        scrollPanePrincipal.setBounds(30, 200, 900, 760);
+        scrollPanePrincipal.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPanePrincipal.setOpaque(true);
+        add(scrollPanePrincipal);
+
+    }
+
+    public void stergere(){
+        remove(panelPrincipal);
+        remove(scrollPanePrincipal);
+    }
+
+    public void addToListPanel(String categorie, Connection connection, Client c){
+        for (Produs p : produse){
+            if (categorie.equals(p.getCategorie().toLowerCase())){
+                JButton produs = new JButton();
+                produs.setSize(new Dimension(300, 400));
+                produs.setBackground(Color.WHITE);
+                produs.setLayout(null);
+
+                JTextArea info = new JTextArea(p.toString());
+                info.setFont(new Font("Calibri", Font.BOLD, 16));
+                info.setBackground(Color.WHITE);
+                info.setForeground(Color.BLACK);
+                info.setSize(new Dimension(300, 50));
+                info.setBounds(0, 0, 300, 50);
+                produs.add(info);
+
+                ImageIcon imgButton = new ImageIcon(p.getImagine());
+                Image imagineButton = imgButton.getImage();
+                Image imagineButtonFinal = imagineButton.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+                imgButton = new ImageIcon(imagineButtonFinal);
+                JLabel imagine = new JLabel(imgButton);
+                imagine.setSize(new Dimension(300, 300));
+                imagine.setBounds(0, 50, 300, 300);
+                produs.add(imagine);
+
+                JButton btn = new JButton("ADAUGA IN COS");
+                btn.setFont(new Font("Calibri", Font.BOLD, 17));
+                btn.setBackground(Color.WHITE);
+                btn.setForeground(Color.BLACK);
+                btn.setSize(new Dimension(300, 50));
+                btn.setBounds(0, 350, 300, 50);
+                btn.setBorderPainted(false);
+                btn.setContentAreaFilled(false);
+                btn.setFocusPainted(false);
+                btn.setOpaque(true);
+                btn.setMargin(new Insets(10, 10, 10, 10));
+                produs.add(btn);
+                produs.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        GUIProdus guiProdus = new GUIProdus(connection, p, c);
+                    }
+                });
+
+                butoane.add(produs);
+            }
+
+            if (categorie.equals("toate")){
+                JButton produs = new JButton();
+                produs.setSize(new Dimension(300, 400));
+                produs.setLayout(null);
+
+                JTextArea info = new JTextArea(p.toString());
+                info.setFont(new Font("Calibri", Font.BOLD, 16));
+                info.setBackground(Color.WHITE);
+                info.setForeground(Color.BLACK);
+                info.setSize(new Dimension(300, 50));
+                info.setBounds(0, 0, 300, 50);
+                produs.add(info);
+
+                ImageIcon imgButton = new ImageIcon(p.getImagine());
+                Image imagineButton = imgButton.getImage();
+                Image imagineButtonFinal = imagineButton.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+                imgButton = new ImageIcon(imagineButtonFinal);
+                JLabel imagine = new JLabel(imgButton);
+                imagine.setSize(new Dimension(300, 300));
+                imagine.setBounds(0, 50, 300, 300);
+                produs.add(imagine);
+
+                JButton btn = new JButton("ADAUGA IN COS");
+                btn.setFont(new Font("Calibri", Font.BOLD, 17));
+                btn.setBackground(Color.WHITE);
+                btn.setForeground(Color.BLACK);
+                btn.setSize(new Dimension(300, 50));
+                btn.setBounds(0, 350, 300, 50);
+                btn.setBorderPainted(false);
+                btn.setContentAreaFilled(false);
+                btn.setFocusPainted(false);
+                btn.setOpaque(true);
+                btn.setMargin(new Insets(10, 10, 10, 10));
+
+                produs.add(btn);
+
+                produs.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        GUIProdus guiProdus = new GUIProdus(connection, p, c);
+                    }
+                });
+
+                butoane.add(produs);
+            }
+        }
+    }
 
     public int getNrIntrari(Connection connection){
         Statement stmt = null;
@@ -195,11 +414,9 @@ public class GUIPaginaPrincipalaClient extends JFrame {
         }
         return count;
     }
-    public void addToPanel(Connection connection, Client c){
-        butoane = new ArrayList<>();
-        JButton aux;
-        Produs temp;
 
+    public void retrieve(Connection connection){
+        produse = new ArrayList<>();
         int count = getNrIntrari(connection);
 
         for (int i = 1; i <= count; i++){
@@ -257,29 +474,10 @@ public class GUIPaginaPrincipalaClient extends JFrame {
                     discount = rs.getBoolean("discount");
                 }
 
-                ImageIcon imgButton = new ImageIcon(imagine);
-                Image imagineButton = imgButton.getImage();
-                Image imagineButtonFinal = imagineButton.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-                imgButton = new ImageIcon(imagineButtonFinal);
-
-                temp = new Produs(i, categorie, nrComenzi, marca, pret, culoare, imagine);
-                aux = new JButton(imgButton);
-                aux.setSize(new Dimension(300, 300));
-                butoane.add(new Pereche(aux, temp));
+                produse.add(new Produs(i, categorie, nrComenzi, marca, pret, culoare, imagine));
             }catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-        }
-
-        for (Pereche p : butoane){
-            produse.add(p.getButonImagine());
-            p.getButonImagine().setToolTipText(p.getInformatiiButon().toString());
-            p.getButonImagine().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    GUIProdus pp = new GUIProdus(connection, p.getInformatiiButon(), c);
-                }
-            });
         }
     }
 }

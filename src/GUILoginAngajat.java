@@ -1,6 +1,4 @@
 import LoginRelated.Angajat;
-import Produse.Produs;
-import com.mysql.cj.protocol.Resultset;
 
 import javax.swing.*;
 import java.awt.*;

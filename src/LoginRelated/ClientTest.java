@@ -1,75 +1,46 @@
 package LoginRelated;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
-
-    @Test
+    Client c = new Client(1, "1", "1", "1", "1", "1", "1");
+    @org.junit.jupiter.api.Test
     void testToString() {
-        Client c = new Client(1, "1", "1", "1", "1");
         String str = "Nume : 1 , prenume : 1 , email : 1 , parola : 1";
         assertEquals(c.toString(), str);
     }
 
-    @Test
-    void getId() {
-        Client c = new Client(1, "1", "1", "1", "1");
-        assertEquals(c.getId(), 1);
+    @org.junit.jupiter.api.Test
+    void testGetId(){
+        assertEquals(1, c.getId());
     }
 
-    @Test
-    void getEmail() {
-        Client c = new Client(1, "1", "1", "1", "1");
-        assertEquals(c.getEmail(), "1");
+    @org.junit.jupiter.api.Test
+    void testGetEmail(){
+        assertEquals("1", c.getEmail());
     }
 
-    @Test
-    void getParola() {
-        Client c = new Client(1, "1", "1", "1", "1");
-        assertEquals(c.getParola(), "1");
+    @org.junit.jupiter.api.Test
+    void testGetParola(){
+        assertEquals("1", c.getParola());
     }
 
-    @Test
-    void setP1() {
-        Client c = new Client(1, "1", "1", "1", "1");
+    @org.junit.jupiter.api.Test
+    void testGetAdresa(){
+        assertEquals("1", c.getAdresa());
+    }
+
+    @org.junit.jupiter.api.Test
+    void testSetteri(){
         c.setP1(1);
-        assertEquals(c.getP1(), 1);
-    }
-
-    @Test
-    void setP2() {
-        Client c = new Client(1, "1", "1", "1", "1");
         c.setP2(1);
-        assertEquals(c.getP2(), 1);
-    }
-
-    @Test
-    void setP3() {
-        Client c = new Client(1, "1", "1", "1", "1");
         c.setP3(1);
-        assertEquals(c.getP3(), 1);
-    }
-
-    @Test
-    void getP1() {
-        Client c = new Client(1, "1", "1", "1", "1");
-        c.setP1(1);
-        assertEquals(c.getP1(), 1);
-    }
-
-    @Test
-    void getP2() {
-        Client c = new Client(1, "1", "1", "1", "1");
-        c.setP2(1);
-        assertEquals(c.getP2(), 1);
-    }
-
-    @Test
-    void getP3() {
-        Client c = new Client(1, "1", "1", "1", "1");
-        c.setP2(1);
-        assertEquals(c.getP2(), 1);
+        c.setP4(1);
+        c.setP5(1);
+        assertEquals(1, c.getP1());
+        assertEquals(1, c.getP2());
+        assertEquals(1, c.getP3());
+        assertEquals(1, c.getP4());
+        assertEquals(1, c.getP5());
     }
 }

@@ -14,7 +14,7 @@ public class GUILogin extends JFrame {
     private JLabel titlu, email, parola;
     private JTextField tfEmail;
     private JPasswordField tfParola;
-    private JButton login;
+    private JButton login, back;
     private JCheckBox arataParola;
     private List<Client> listaClienti;
 
@@ -75,7 +75,28 @@ public class GUILogin extends JFrame {
         login.setForeground(Color.WHITE);
         login.setSize(new Dimension(150, 50));
         login.setFont(new Font("Monaco", Font.BOLD, 17));
-        login.setBounds(120, 250, 150, 50);
+        login.setBounds(20, 250, 150, 50);
+
+        back = new JButton("INAPOI");
+        back.setBackground(new Color (20, 66, 114));
+        back.setOpaque(true);
+        back.setForeground(Color.WHITE);
+        back.setSize(new Dimension(150, 50));
+        back.setFont(new Font("Monaco", Font.BOLD, 17));
+        back.setBounds(200, 250, 150, 50);
+        add(back);
+
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                setVisible(false);
+                GUIPaginaPrincipala paginaPrincipala = new GUIPaginaPrincipala(connection);
+                paginaPrincipala.setVisible(true);
+                paginaPrincipala.setLocationRelativeTo(null);
+                paginaPrincipala.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            }
+        });
 
         arataParola = new JCheckBox("Arata parola");
         arataParola.addActionListener(ae -> {
@@ -149,8 +170,8 @@ public class GUILogin extends JFrame {
 
         for (int i = 1; i <= count; i++){
             try{
-                String nume = "", prenume = "", email = "", parola = "";
-                int p1 = 0, p2 = 0, p3 = 0;
+                String nume = "", prenume = "", email = "", parola = "", adresa = "", telefon = "";
+                int p1 = 0, p2 = 0, p3 = 0, p4 = 0, p5 = 0;
                 PreparedStatement prep = connection.prepareStatement("select nume from clienti where (id)=(?)");
                 prep.setInt(1, i);
                 ResultSet rs = prep.executeQuery();
@@ -179,31 +200,60 @@ public class GUILogin extends JFrame {
                     parola = rs.getString("parola");
                 }
 
-                prep = connection.prepareStatement("select idProdus1 from clienti where (id)=(?)");
+                prep = connection.prepareStatement("select produs1 from clienti where (id)=(?)");
                 prep.setInt(1, i);
                 rs = prep.executeQuery();
                 if (rs.next()) {
-                    p1 = rs.getInt("idProdus1");
+                    p1 = rs.getInt("produs1");
                 }
 
-                prep = connection.prepareStatement("select idProdus2 from clienti where (id)=(?)");
+                prep = connection.prepareStatement("select produs2 from clienti where (id)=(?)");
                 prep.setInt(1, i);
                 rs = prep.executeQuery();
                 if (rs.next()) {
-                    p2 = rs.getInt("idProdus2");
+                    p2 = rs.getInt("produs2");
                 }
 
-                prep = connection.prepareStatement("select idProdus3 from clienti where (id)=(?)");
+                prep = connection.prepareStatement("select produs3 from clienti where (id)=(?)");
                 prep.setInt(1, i);
                 rs = prep.executeQuery();
                 if (rs.next()) {
-                    p3 = rs.getInt("idProdus3");
+                    p3 = rs.getInt("produs3");
                 }
 
-                Client c = new Client(i, nume, prenume, email, parola);
+                prep = connection.prepareStatement("select produs4 from clienti where (id)=(?)");
+                prep.setInt(1, i);
+                rs = prep.executeQuery();
+                if (rs.next()) {
+                    p4 = rs.getInt("produs4");
+                }
+                prep = connection.prepareStatement("select produs5 from clienti where (id)=(?)");
+                prep.setInt(1, i);
+                rs = prep.executeQuery();
+                if (rs.next()) {
+                    p5 = rs.getInt("produs5");
+                }
+
+                prep = connection.prepareStatement("select adresa from clienti where (id)=(?)");
+                prep.setInt(1, i);
+                rs = prep.executeQuery();
+                if (rs.next()) {
+                    adresa = rs.getString("adresa");
+                }
+
+                prep = connection.prepareStatement("select telefon from clienti where (id)=(?)");
+                prep.setInt(1, i);
+                rs = prep.executeQuery();
+                if (rs.next()) {
+                    telefon = rs.getString("telefon");
+                }
+
+                Client c = new Client(i, nume, prenume, email, parola, adresa, telefon);
                 c.setP1(p1);
                 c.setP2(p2);
                 c.setP3(p3);
+                c.setP4(p4);
+                c.setP5(p5);
                 this.listaClienti.add(c);
             }catch (SQLException ex) {
                 throw new RuntimeException(ex);
